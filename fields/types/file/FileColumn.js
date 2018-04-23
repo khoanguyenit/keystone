@@ -15,9 +15,7 @@ var LocalFileColumn = React.createClass({
 		var label = value && value.filename ? value.filename : null;
 		// check if file type is image
 		if(value && value.mimetype) {
-			console.log(this.props);
 			if(this.props.col.file.type == "image") {
-				
 				label = <img src={'/'+this.props.col.file.path+'/'+label} width={this.props.col.file.width} height={this.props.col.file.height} />;
 			}
 		}
