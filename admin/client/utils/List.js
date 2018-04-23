@@ -160,13 +160,27 @@ List.prototype.expandColumns = function (input) {
 		if (path === this.namePath) {
 			nameIncluded = true;
 		}
-		return {
+
+		let res = {
 			field: field,
 			label: field.label,
 			path: field.path,
 			type: field.type,
 			width: width,
 		};
+
+		// custom for type file image
+		if(field.type == 'file') {
+			res.file = {
+				type: split[2] || "",
+				path: split[3] || "",
+				width: split[4] || "",
+				height: split[5] || ""
+			};
+		}
+		
+		return res;
+
 	}).filter(truthy);
 	if (!nameIncluded) {
 		cols.unshift({
