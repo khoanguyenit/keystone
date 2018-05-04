@@ -8,6 +8,7 @@ var marked = require('marked');
 var Path = require('../../lib/path');
 var utils = require('keystone-utils');
 var evalDependsOn = require('../utils/evalDependsOn.js');
+var evalNotDependsOn = require('../utils/evalNotDependsOn.js');
 var definePrototypeGetters = require('../utils/definePrototypeGetters.js');
 var debug = require('debug')('keystone:fields:types:Type');
 
@@ -28,6 +29,7 @@ var DEFAULT_OPTION_KEYS = [
 	'hidden',
 	'collapse',
 	'dependsOn',
+	'notDependsOn',
 	'autoCleanup',
 	'thumb',
 ];
@@ -77,6 +79,15 @@ function Field (list, path, options) {
 			// `this` refers to the validating document
 			debug('validate dependsOn required', evalDependsOn(opts.dependsOn, this.toObject()));
 			return evalDependsOn(opts.dependsOn, this.toObject());
+		};
+	}
+
+	if (this.options.notDependsOn && this.options.required === true) {
+		var opts = this.options;
+		this.options.required = function () {
+			// `this` refers to the validating document
+			debug('validate notDependsOn required', evalNotDependsOn(opts.notDependsOn, this.toObject()));
+			return evalNotDependsOn(opts.notDependsOn, this.toObject());
 		};
 	}
 
@@ -234,6 +245,7 @@ definePrototypeGetters(Field, {
 	collapse: function () { return this.options.collapse || false; },
 	hidden: function () { return this.options.hidden || false; },
 	dependsOn: function () { return this.options.dependsOn || false; },
+	notDependsOn: function () { return this.options.notDependsOn || false; },
 });
 
 /**

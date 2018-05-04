@@ -30,6 +30,17 @@ module.exports = function (req, res) {
 		assign(where, req.list.addSearchToQuery(req.query.search));
 	}
 	var query = req.list.model.find(where);
+	// custom query with default conditions
+	if(req.list.options.defaultConditions) {
+		for(let field in req.list.options.defaultConditions) {
+			for(let condition in req.list.options.defaultConditions[field]) {
+				let data = req.list.options.defaultConditions[field][condition];
+				// build query
+				query.where(field)[condition](data);
+			}	
+		}
+	}
+
 	if (req.query.populate) {
 		query.populate(req.query.populate);
 	}
@@ -56,6 +67,7 @@ module.exports = function (req, res) {
 			if (sort.string) {
 				query.sort(sort.string);
 			}
+
 			query.exec(function (err, items) {
 				next(err, count, items);
 			});

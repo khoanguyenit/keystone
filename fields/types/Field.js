@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import evalDependsOn from '../utils/evalDependsOn.js';
+import evalNotDependsOn from '../utils/evalNotDependsOn.js';
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import { FormField, FormInput, FormNote } from '../../admin/client/App/elemental';
@@ -140,6 +141,11 @@ module.exports.create = function (spec) {
 		},
 		render () {
 			if (!evalDependsOn(this.props.dependsOn, this.props.values)) {
+				console.log(this.props.dependsOn);
+				console.log(this.props.values);
+				return null;
+			}
+			if (evalNotDependsOn(this.props.notDependsOn, this.props.values)) {
 				return null;
 			}
 			if (this.state.isCollapsed) {
