@@ -32,7 +32,7 @@ module.exports = function (req, res) {
 	}
 	var deletedCount = 0;
 	var deletedIds = [];
-	req.list.model.find().where('_id').in(ids).exec(function (err, results) {
+	req.list.model.find().or([{ _id: { $in: ids } }, { keyID: { $in: ids } }]).exec(function (err, results) {
 		if (err) {
 			console.log('Error deleting ' + req.list.key + ' items:', err);
 			return res.apiError('database error', err);
