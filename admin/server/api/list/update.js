@@ -11,7 +11,7 @@ module.exports = function (req, res) {
 	}
 	// var updateCount = 0;
 	async.map(req.body.items, function (data, done) {
-		req.list.model.findOne({$or: [{_id: data.id}, {keyID: data.id}]}, function (err, item) {
+		req.list.model.find().or([{ _id: { $in: data.id } }, { keyID: { $in: data.id } }]).exec(function (err, item) {
 			if (err) return done({ statusCode: 500, error: 'database error', detail: err, id: data.id });
 			// custom keystones find by id if not found find by keyID, it still not found return 404
 			if (!item) return done({ statusCode: 404, error: 'not found', id: data.id });
