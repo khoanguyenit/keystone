@@ -4,7 +4,7 @@ var listToArray = require('list-to-array');
 
 module.exports = function (req, res) {
 	var keystone = req.keystone;
-	var query = req.list.model.findById(req.params.id);
+	var query = req.list.model.findOne().or([{ _id: req.params.id }, { keyID: req.params.id }]);
 
 	var fields = req.query.fields;
 	if (fields === 'false') {

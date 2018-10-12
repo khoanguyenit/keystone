@@ -5,6 +5,9 @@ module.exports = function (req, res) {
 	}
 
 	var item = new req.list.model();
+	if(req.body.keyID) {
+		item._id = req.body.keyID;
+	}
 	req.list.updateItem(item, req.body, {
 		files: req.files,
 		ignoreNoEdit: true,
